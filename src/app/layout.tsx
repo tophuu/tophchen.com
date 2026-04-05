@@ -1,0 +1,68 @@
+import type { Metadata } from "next";
+
+import { MusicProvider } from "../lib/MusicContext";
+import "./globals.css";
+
+/** Canonical site URL for OG/Twitter metadata. Set in Vercel: NEXT_PUBLIC_SITE_URL=https://tophchen.com */
+function siteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
+/** Keep in sync with the intro paragraphs in AboutNote.tsx */
+const siteDescription =
+  "Hey! I'm Toph — a computer science student at the University of Waterloo. I have a passion for building cool stuff that makes a real difference for the people using it. As a software engineer, I like moving fast, taking ownership of my work, and bringing ideas to life from start to finish. I build things that matter.";
+
+export const metadata: Metadata = {
+  // Must match the host you’re viewing (localhost in dev), or /favicon.svg resolves to production and won’t load locally.
+  metadataBase: new URL(siteUrl()),
+  title: "Toph Chen",
+  description: siteDescription,
+  authors: [{ name: "Toph Chen", url: "https://github.com/tophuu" }],
+  openGraph: {
+    title: "Toph Chen",
+    description: siteDescription,
+    type: "website",
+    locale: "en_US",
+    siteName: "Toph Chen",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Toph Chen",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Toph Chen",
+    description: siteDescription,
+    creator: "@__tophu",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body data-wallpaper="big-sur" data-notes-theme="white" data-active-note="about" suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{ __html: `(function(){var b=document.body,V=['about','projects','contact'];try{var w=localStorage.getItem('pref-wallpaper');if(w)b.dataset.wallpaper=w;var t=localStorage.getItem('pref-theme');if(t==='black'||t==='white')b.dataset.notesTheme=t;var n=localStorage.getItem('pref-active-note');if(n&&V.indexOf(n)>=0)b.dataset.activeNote=n}catch(e){}b.classList.add('no-transition')})()` }}
+        />
+        <MusicProvider>
+          {children}
+        </MusicProvider>
+      </body>
+    </html>
+  );
+}
