@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "export:readme-icon": "curl -sfL http://127.0.0.1:3000/readme-assets/icon -o docs/readme-favicon.png"
   },
   "dependencies": {
     "next": "16.2.1",

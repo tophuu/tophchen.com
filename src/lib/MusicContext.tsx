@@ -96,6 +96,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const wasPlayingBeforeSeekRef = useRef(false);
   const switchingTrackRef = useRef(false);
   const playAttemptIdRef = useRef(0);
+  const preloadedArtRef = useRef<Set<string>>(new Set());
 
   const [currentTrack, setCurrentTrack] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -106,6 +107,17 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [dur, setDur] = useState("0:00");
 
   const track = tracks[currentTrack];
+
+  const preloadArt = useCallback((art?: string) => {
+    if (!art || preloadedArtRef.current.has(art)) return;
+    preloadedArtRef.current.add(art);
+    const img = new Image();
+    img.decoding = "async";
+    img.src = art;
+    if (typeof img.decode === "function") {
+      void img.decode().catch(() => {});
+    }
+  }, []);
 
   const persistHistory = useCallback(() => {
     try {
@@ -479,15 +491,43 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
   }, [isPlaying]);
 
-  // Preload ALL album art once on mount (~1.4 MB total) so every skip is instant.
+  // Stagger preload unique album art to avoid competing with startup work.
   useEffect(() => {
-    for (const t of tracks) {
-      if (t.art) {
-        const img = new Image();
-        img.src = t.art;
+    const uniqueArt = Array.from(
+      new Set(tracks.map((t) => t.art).filter((art): art is string => Boolean(art))),
+    );
+
+    let cursor = 0;
+    let timer: number | null = null;
+
+    const step = () => {
+      // Keep concurrency low to reduce UI/decode contention at startup.
+      for (let i = 0; i < 3 && cursor < uniqueArt.length; i++) {
+        preloadArt(uniqueArt[cursor]);
+        cursor++;
       }
-    }
-  }, []);
+      if (cursor < uniqueArt.length) {
+        timer = window.setTimeout(step, 120);
+      }
+    };
+
+    timer = window.setTimeout(step, 300);
+    return () => {
+      if (timer !== null) window.clearTimeout(timer);
+    };
+  }, [preloadArt]);
+
+  // Prioritize current/nearby art so quick skips are more likely cache-hot.
+  useEffect(() => {
+    const idxs = [
+      currentTrack,
+      (currentTrack + 1) % tracks.length,
+      (currentTrack + 2) % tracks.length,
+      (currentTrack - 1 + tracks.length) % tracks.length,
+      (currentTrack - 2 + tracks.length) % tracks.length,
+    ];
+    for (const idx of idxs) preloadArt(tracks[idx]?.art);
+  }, [currentTrack, preloadArt]);
 
   // Prefetch next track audio so playback starts faster on skip.
   useEffect(() => {
