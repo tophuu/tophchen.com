@@ -1016,7 +1016,9 @@ body .exp-details {
 }
 .md-marquee::after {
   right: 0;
-  background: linear-gradient(to left, var(--music-dropdown-bg), rgba(0, 0, 0, 0));
+  background-color: var(--music-dropdown-bg);
+  -webkit-mask-image: linear-gradient(to left, black, transparent);
+  mask-image: linear-gradient(to left, black, transparent);
 }
 .md-marquee-fade-left {
   position: absolute;
@@ -1026,7 +1028,9 @@ body .exp-details {
   width: 7px;
   pointer-events: none;
   z-index: 2;
-  background: linear-gradient(to right, var(--music-dropdown-bg), rgba(0, 0, 0, 0));
+  background-color: var(--music-dropdown-bg);
+  -webkit-mask-image: linear-gradient(to right, black, transparent);
+  mask-image: linear-gradient(to right, black, transparent);
   opacity: 0;
 }
 .md-marquee-inner {
