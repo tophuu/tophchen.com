@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Measure integrated loudness (EBU R128) for every MP3 in public/songs.
-# Usage: ./measure-loudness.sh [output.txt]
-# Default output: loudness-report.txt in repo root.
+# Usage: ./scripts/loudness/measure-loudness.sh [output.txt]
+# Default output: scripts/loudness/loudness-report.txt
 
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SONGS_DIR="$ROOT/public/songs"
-OUT="${1:-$ROOT/loudness-report.txt}"
+OUT="${1:-$SCRIPT_DIR/loudness-report.txt}"
 
 if [[ ! -d "$SONGS_DIR" ]]; then
   echo "Missing $SONGS_DIR" >&2

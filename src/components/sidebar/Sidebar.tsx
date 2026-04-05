@@ -77,6 +77,7 @@ export default function Sidebar({ onSelectNote }: SidebarProps) {
             onClick={() => onSelectNote(note.id)}
             className="note-preview"
             data-note={note.id}
+            aria-label={`Open ${note.title}`}
           >
             <div className="np-title">{note.title}</div>
             <div className="np-row2">

@@ -283,7 +283,7 @@ export default function DynamicIsland({
           onClick={handleDropdownClick}
         >
           <div className="md-album">
-            {track.art ? <img src={track.art} alt="" className="md-album-img" /> : null}
+            {track.art ? <img key={track.file} src={track.art} alt={`${track.name} album art`} className="md-album-img" /> : null}
           </div>
 
           <div className="md-full-content">
@@ -295,20 +295,20 @@ export default function DynamicIsland({
               <PlaybackIndicator playing={isPlaying} />
             </div>
             <div className="md-controls">
-              <button className="md-ctrl" onClick={() => onPrev()}>
+              <button className="md-ctrl" aria-label="Previous track" onClick={() => onPrev()}>
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12.2 7.2Q12.2 6.5 11.5 6.9L5.4 11Q4.8 11.4 4.8 12Q4.8 12.6 5.4 13L11.5 17.1Q12.2 17.5 12.2 16.8Z" />
                   <path d="M20.2 7.2Q20.2 6.5 19.5 6.9L13.4 11Q12.8 11.4 12.8 12Q12.8 12.6 13.4 13L19.5 17.1Q20.2 17.5 20.2 16.8Z" />
                 </svg>
               </button>
-              <button className="md-ctrl md-play" onClick={() => onTogglePlay()}>
+              <button className="md-ctrl md-play" aria-label={isPlaying ? "Pause" : "Play"} onClick={() => onTogglePlay()}>
                 {isPlaying ? (
-                  <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
                 ) : (
-                  <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
                 )}
               </button>
-              <button className="md-ctrl" onClick={() => onNext()}>
+              <button className="md-ctrl" aria-label="Next track" onClick={() => onNext()}>
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M11.8 7.2Q11.8 6.5 12.5 6.9L18.6 11Q19.2 11.4 19.2 12Q19.2 12.6 18.6 13L12.5 17.1Q11.8 17.5 11.8 16.8Z" />
                   <path d="M3.8 7.2Q3.8 6.5 4.5 6.9L10.6 11Q11.2 11.4 11.2 12Q11.2 12.6 10.6 13L4.5 17.1Q3.8 17.5 3.8 16.8Z" />
@@ -326,6 +326,7 @@ export default function DynamicIsland({
                 <input
                   type="range"
                   className="md-slider"
+                  aria-label="Seek"
                   min="0"
                   max="100"
                   value={progress}
@@ -347,14 +348,14 @@ export default function DynamicIsland({
               <ScrollingText text={track.artist} className="md-artist" syncRef={miniSyncRef} syncKey="artist" active={isMini && isPlaying} />
             </div>
             <div className="md-mini-controls">
-              <button className="md-ctrl" onClick={() => onTogglePlay()}>
+              <button className="md-ctrl" aria-label={isPlaying ? "Pause" : "Play"} onClick={() => onTogglePlay()}>
                 {isPlaying ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
                 ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
                 )}
               </button>
-              <button className="md-ctrl" onClick={() => onNext()}>
+              <button className="md-ctrl" aria-label="Next track" onClick={() => onNext()}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M11.8 7.2Q11.8 6.5 12.5 6.9L18.6 11Q19.2 11.4 19.2 12Q19.2 12.6 18.6 13L12.5 17.1Q11.8 17.5 11.8 16.8Z" />
                   <path d="M3.8 7.2Q3.8 6.5 4.5 6.9L10.6 11Q11.2 11.4 11.2 12Q11.2 12.6 10.6 13L4.5 17.1Q3.8 17.5 3.8 16.8Z" />

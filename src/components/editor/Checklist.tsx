@@ -10,6 +10,7 @@ function ChecklistItem({ checked: initial = false, children }: { checked?: boole
       <button
         onClick={() => setChecked(!checked)}
         className={`check-circle ${checked ? "checked" : ""}`}
+        aria-label={checked ? "Uncheck item" : "Check item"}
       >
         ✓
       </button>

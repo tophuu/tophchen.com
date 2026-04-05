@@ -2,11 +2,12 @@
 # Normalize every MP3 from public/songs-originals into public/songs at -14 LUFS
 # (single-pass loudnorm), 192 kb/s stereo. Skips if no matching original exists.
 #
-# Usage: ./normalize-songs.sh              # all tracks that have an original
-#        ./normalize-songs.sh "file.mp3"   # single file (basename only)
+# Usage: ./scripts/loudness/normalize-songs.sh              # all tracks that have an original
+#        ./scripts/loudness/normalize-songs.sh "file.mp3"   # single file (basename only)
 
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 ORIG="$ROOT/public/songs-originals"
 OUT="$ROOT/public/songs"
 TARGET_I=-14

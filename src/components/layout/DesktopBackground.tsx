@@ -212,6 +212,9 @@ export default function DesktopBackground() {
             key={bg.id}
             className="bg-dot"
             data-bg={bg.id}
+            role="button"
+            tabIndex={0}
+            aria-label={`${bg.id.charAt(0).toUpperCase() + bg.id.slice(1)} wallpaper`}
             style={dotStyles[bg.id]}
             onClick={() => { setActive(bg.id); document.body.dataset.wallpaper = bg.id; }}
             title={bg.id.charAt(0).toUpperCase() + bg.id.slice(1)}
