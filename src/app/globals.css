@@ -1244,94 +1244,11 @@ body .exp-details {
   font-variant-numeric: tabular-nums;
 }
 
-/* Phone-specific compact music dropdown */
+/* Phone-specific: scale the dropdown uniformly so proportions match desktop exactly */
 @media (pointer: coarse) and (max-height: 500px), (pointer: coarse) and (max-width: 767px) {
   .music-dropdown {
-    --md-full-icon-left: 10px;
-    --md-full-icon-top: 10px;
-    --md-full-icon-size: 82px;
-    --md-full-content-gap: 8px;
-    --md-icon-left: 10px;
-    --md-icon-top: 10px;
-    --md-icon-size: 82px;
-    --md-content-gap: 8px;
-    width: 248px;
-    height: 116px;
-    right: -2px;
-    border-radius: 12px;
-    padding: 6px 8px;
-  }
-
-  .music-dropdown.md-mini {
-    --md-icon-left: 12px;
-    --md-icon-size: 32px;
-    --md-content-gap: 8px;
-    --md-icon-top: calc((56px - var(--md-icon-size)) / 2);
-    height: 56px;
-    padding: 8px 10px;
-  }
-
-  .music-dropdown.md-mini .md-mini-content {
-    gap: 6px;
-  }
-
-  .md-full-content {
-    right: 8px;
-  }
-
-  .md-text-row {
-    gap: 6px;
-  }
-
-  .md-song {
-    font-size: 12px;
-  }
-
-  .md-artist {
-    font-size: 10px;
-    margin-top: 1px;
-  }
-
-  .md-playback-indicator {
-    height: 12px;
-    gap: 0;
-    transform: scale(0.88);
-    transform-origin: center;
-  }
-
-  .md-indicator-bar {
-    width: 1.5px;
-    height: 9px;
-  }
-
-  .md-controls {
-    gap: 6px;
-    transform: scale(0.82);
-    transform-origin: center center;
-  }
-
-  .md-progress-bar {
-    height: 10px;
-  }
-
-  .md-slider {
-    height: 10px;
-  }
-
-  .md-slider::-webkit-slider-thumb {
-    width: 14px;
-    height: 10px;
-    margin-top: -3px;
-  }
-
-  .md-slider::-moz-range-thumb {
-    width: 14px;
-    height: 10px;
-  }
-
-  .md-times {
-    font-size: 10px;
-    margin-top: 2px;
+    transform: scale(0.75);
+    transform-origin: top right;
   }
 }
 
