@@ -1244,6 +1244,42 @@ body .exp-details {
   font-variant-numeric: tabular-nums;
 }
 
+/* Phone-specific compact music dropdown */
+@media (pointer: coarse) and (max-height: 500px), (pointer: coarse) and (max-width: 767px) {
+  .music-dropdown {
+    --md-full-icon-left: 12px;
+    --md-full-icon-top: 12px;
+    --md-full-icon-size: 98px;
+    --md-full-content-gap: 10px;
+    --md-icon-left: 12px;
+    --md-icon-top: 12px;
+    --md-icon-size: 98px;
+    --md-content-gap: 10px;
+    width: 292px;
+    height: 124px;
+    right: -4px;
+    border-radius: 13px;
+    padding: 8px 10px;
+  }
+
+  .music-dropdown.md-mini {
+    --md-icon-left: 14px;
+    --md-icon-size: 42px;
+    --md-content-gap: 12px;
+    --md-icon-top: calc((72px - var(--md-icon-size)) / 2);
+    height: 72px;
+    padding: 12px 14px;
+  }
+
+  .music-dropdown.md-mini .md-mini-content {
+    gap: 8px;
+  }
+
+  .md-controls {
+    gap: 10px;
+  }
+}
+
 /* ===== BACKGROUND SWITCHER ===== */
 .bg-switcher {
   position: fixed;
