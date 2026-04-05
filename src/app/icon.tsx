@@ -3,13 +3,13 @@ import { ImageResponse } from "next/og";
 import { appIconDivStyle } from "./icon-style";
 
 export const size = {
-  width: 180,
-  height: 180,
+  width: 32,
+  height: 32,
 };
 
 export const contentType = "image/png";
 
-export default function AppleIcon() {
+export default function Icon() {
   return new ImageResponse(
     <div style={appIconDivStyle(size.width)}>tc</div>,
     {

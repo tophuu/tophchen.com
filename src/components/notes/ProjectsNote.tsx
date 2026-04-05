@@ -3,7 +3,7 @@ import ProjectCard from "../editor/ProjectCard";
 export default function ProjectsNote() {
   return (
     <article>
-      <div className="note-date">March 29, 2026 at 3:42 PM</div>
+      <div className="note-date">March 30, 2026 at 10:25 PM</div>
       <h1>Projects</h1>
       <p>Some things I&apos;ve built or am currently building.</p>
 
