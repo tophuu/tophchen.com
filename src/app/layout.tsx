@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { MusicProvider } from "../lib/MusicContext";
 import "./globals.css";
@@ -9,6 +9,12 @@ function siteUrl(): string {
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return "http://localhost:3000";
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 /** Keep in sync with the intro paragraphs in AboutNote.tsx */
 const siteDescription =

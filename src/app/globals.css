@@ -60,6 +60,7 @@ body.theme-transitioning *::after {
   --note-body-max-width: 720px;
   --theme-transition-duration: 0.6s;
   --theme-transition-easing: ease;
+  --notes-scale: 1;
   --exp-toggle-duration: 0.35s;
   --exp-toggle-easing: ease;
   --exp-icon-size: 48px;
@@ -91,10 +92,12 @@ body.theme-transitioning *::after {
 body {
   font-family: var(--system-font);
   color: var(--text-primary);
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
 }
 
 body[data-notes-theme="black"] {
@@ -149,7 +152,7 @@ body[data-notes-theme="black"] {
 /* ===== MENU BAR ===== */
 .menu-bar {
   position: fixed;
-  top: 0;
+  top: env(safe-area-inset-top, 0px);
   inset-inline: 0;
   height: 25px;
   background: transparent;
@@ -158,7 +161,7 @@ body[data-notes-theme="black"] {
   z-index: 100;
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 calc(12px + env(safe-area-inset-right, 0px)) 0 calc(12px + env(safe-area-inset-left, 0px));
   font-size: 13px;
   font-weight: 500;
   user-select: none;
@@ -195,6 +198,35 @@ body[data-notes-theme="black"] {
   display: flex;
   align-items: center;
   height: 25px;
+}
+
+.home-stage {
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-top: calc(25px + env(safe-area-inset-top, 0px));
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+  user-select: none;
+}
+
+.notes-scale-frame {
+  width: calc(1140px * var(--notes-scale));
+  height: calc(712px * var(--notes-scale));
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.notes-scale-content {
+  width: 1140px;
+  height: 712px;
+  transform: scale(var(--notes-scale));
+  transform-origin: top center;
+  will-change: transform;
 }
 
 /* ===== APP WINDOW ===== */
@@ -1215,8 +1247,8 @@ body .exp-details {
 /* ===== BACKGROUND SWITCHER ===== */
 .bg-switcher {
   position: fixed;
-  bottom: 14px;
-  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  right: calc(14px + env(safe-area-inset-right, 0px));
   z-index: 200;
   display: flex;
   flex-direction: column;
@@ -1300,3 +1332,44 @@ body[data-wallpaper="minimal"] [data-bg="minimal"] {
   margin: 6px 0 14px;
 }
 ::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 999px; }
+
+/* ===== MOBILE: Portrait-mode overlay ===== */
+.portrait-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background-color: var(--bg);
+  font-family: var(--system-font);
+}
+
+.portrait-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.portrait-icon {
+  color: var(--text-tertiary);
+}
+
+.portrait-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+@media (orientation: portrait) and (max-width: 767px) and (pointer: coarse) {
+  .portrait-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-bar,
+  .bg-switcher {
+    display: none !important;
+  }
+}
