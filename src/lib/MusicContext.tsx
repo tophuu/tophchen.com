@@ -479,38 +479,23 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
   }, [isPlaying]);
 
-  // Preload adjacent track art + next track audio so skipping feels instant.
+  // Preload ALL album art once on mount (~1.4 MB total) so every skip is instant.
   useEffect(() => {
-    const indices = new Set<number>();
-
-    // Next from history
-    const pos = historyPosRef.current;
-    const h = playHistoryRef.current;
-    if (pos < h.length - 1) indices.add(h[pos + 1]);
-
-    // Previous from history
-    if (pos > 0) indices.add(h[pos - 1]);
-
-    // Next from shuffled deck
-    const deck = shuffledDeckRef.current;
-    const dPos = deckPosRef.current;
-    if (dPos < deck.length) indices.add(deck[dPos]);
-
-    indices.delete(currentTrack);
-
-    for (const idx of indices) {
-      const t = tracks[idx];
-      if (!t) continue;
-      // Preload art
+    for (const t of tracks) {
       if (t.art) {
         const img = new Image();
         img.src = t.art;
       }
-      // Prefetch audio for the most likely next track only (first in set)
-      break;
     }
+  }, []);
 
-    // Prefetch next track audio with low priority
+  // Prefetch next track audio so playback starts faster on skip.
+  useEffect(() => {
+    const pos = historyPosRef.current;
+    const h = playHistoryRef.current;
+    const deck = shuffledDeckRef.current;
+    const dPos = deckPosRef.current;
+
     const nextIdx = pos < h.length - 1
       ? h[pos + 1]
       : dPos < deck.length

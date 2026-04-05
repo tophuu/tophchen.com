@@ -283,7 +283,7 @@ export default function DynamicIsland({
           onClick={handleDropdownClick}
         >
           <div className="md-album">
-            {track.art ? <img key={track.file} src={track.art} alt={`${track.name} album art`} className="md-album-img" /> : null}
+            {track.art ? <img src={track.art} alt={`${track.name} album art`} className="md-album-img" /> : null}
           </div>
 
           <div className="md-full-content">
