@@ -5,10 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const bgs = [
   {
     id: "big-sur",
-    image: "/images/wallpapers/macos-big-sur-apple-layers-fluidic-colorful-wwdc-stock-4096x2304-1455.jpg",
+    image: "/images/wallpapers/macos-big-sur-apple-layers-fluidic-colorful-wwdc-stock-4096x2304-1455.webp",
   },
-  { id: "tahoe", image: "/images/wallpapers/macos-tahoe-26-5120x2880-22675.jpg" },
-  { id: "sequoia", image: "/images/wallpapers/macos-sequoia-4096x2264-17018.jpg" },
+  { id: "tahoe", image: "/images/wallpapers/macos-tahoe-26-5120x2880-22675.webp" },
+  { id: "sequoia", image: "/images/wallpapers/macos-sequoia-4096x2264-17018.webp" },
   { id: "minimal", image: null },
 ];
 

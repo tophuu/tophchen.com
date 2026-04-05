@@ -21,7 +21,6 @@ const siteDescription =
   "Hey! I'm Toph — a computer science student at the University of Waterloo. I have a passion for building cool stuff that makes a real difference for the people using it. As a software engineer, I like moving fast, taking ownership of my work, and bringing ideas to life from start to finish. I build things that matter.";
 
 export const metadata: Metadata = {
-  // Must match the host you’re viewing (localhost in dev), or /favicon.svg resolves to production and won’t load locally.
   metadataBase: new URL(siteUrl()),
   title: "Toph Chen",
   description: siteDescription,

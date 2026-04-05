@@ -466,7 +466,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         ? [
             {
               src: mediaArtUrl(track.art) ?? track.art,
-              sizes: "512x512",
+              sizes: "256x256",
               type: "image/webp",
             },
           ]
@@ -478,6 +478,53 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
     navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
   }, [isPlaying]);
+
+  // Preload adjacent track art + next track audio so skipping feels instant.
+  useEffect(() => {
+    const indices = new Set<number>();
+
+    // Next from history
+    const pos = historyPosRef.current;
+    const h = playHistoryRef.current;
+    if (pos < h.length - 1) indices.add(h[pos + 1]);
+
+    // Previous from history
+    if (pos > 0) indices.add(h[pos - 1]);
+
+    // Next from shuffled deck
+    const deck = shuffledDeckRef.current;
+    const dPos = deckPosRef.current;
+    if (dPos < deck.length) indices.add(deck[dPos]);
+
+    indices.delete(currentTrack);
+
+    for (const idx of indices) {
+      const t = tracks[idx];
+      if (!t) continue;
+      // Preload art
+      if (t.art) {
+        const img = new Image();
+        img.src = t.art;
+      }
+      // Prefetch audio for the most likely next track only (first in set)
+      break;
+    }
+
+    // Prefetch next track audio with low priority
+    const nextIdx = pos < h.length - 1
+      ? h[pos + 1]
+      : dPos < deck.length
+        ? deck[dPos]
+        : undefined;
+    if (nextIdx !== undefined && nextIdx !== currentTrack && tracks[nextIdx]) {
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.as = "fetch";
+      link.href = trackUrl(tracks[nextIdx].file);
+      document.head.appendChild(link);
+      return () => { link.remove(); };
+    }
+  }, [currentTrack]);
 
   const value: MusicState = {
     track,
