@@ -25,6 +25,18 @@ body.theme-transitioning *::after {
   transition-delay: 0s !important;
 }
 
+/* Elements that don't respond to the notes-theme toggle — exempt them from the
+   blanket transition so mobile GPUs don't waste cycles tracking them. */
+body.theme-transitioning .desktop-bg,
+body.theme-transitioning .webring-widget,
+body.theme-transitioning .webring-widget *,
+body.theme-transitioning .bg-switcher,
+body.theme-transitioning .bg-switcher *,
+body.theme-transitioning .portrait-overlay,
+body.theme-transitioning .portrait-overlay * {
+  transition-property: none !important;
+}
+
   :root {
   --bg: #ffffff;
   --sidebar-bg: rgba(246,246,248,0.92);
@@ -1270,6 +1282,150 @@ body .exp-details {
   padding: 8px 7px;
   border-radius: 14px;
 }
+
+/* ===== WEBRING WIDGET ===== */
+.webring-widget {
+  position: fixed;
+  left: calc(14px + env(safe-area-inset-left, 0px));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 210;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-sizing: border-box;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  filter: none;
+}
+
+.webring-nav,
+.webring-core {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: rgba(255,255,255,0.88);
+  line-height: 1;
+  flex-shrink: 0;
+  background: transparent;
+  transition: color 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s;
+}
+
+.webring-nav {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.webring-nav-prev {
+  margin-right: -2px;
+}
+
+.webring-nav-next {
+  margin-left: -2px;
+}
+
+.webring-arrow-svg {
+  display: block;
+  width: 16px;
+  height: 8px;
+  flex-shrink: 0;
+}
+
+.webring-nav:hover {
+  transform: scale(1.2);
+}
+.webring-core:hover {
+  transform: scale(1.15);
+}
+
+.webring-nav:active {
+  transform: scale(1);
+}
+.webring-core:active {
+  transform: scale(1);
+}
+
+.webring-core {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.webring-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  opacity: 0.88;
+  transition: filter 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body[data-wallpaper="minimal"] .webring-nav,
+body[data-wallpaper="minimal"] .webring-core {
+  color: rgba(0,0,0,0.82);
+}
+body[data-wallpaper="minimal"] .webring-icon {
+  filter: brightness(0);
+  opacity: 0.82;
+}
+
+@media (pointer: coarse) and (max-height: 500px), (pointer: coarse) and (max-width: 767px) {
+  .webring-widget {
+    left: calc(10px + env(safe-area-inset-left, 0px));
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 3px;
+  }
+  .webring-core {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+  }
+  .webring-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .webring-nav {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    padding: 0;
+  }
+  .webring-arrow-svg {
+    width: 14px;
+    height: 7px;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .webring-widget {
+    left: calc(12px + env(safe-area-inset-left, 0px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .bg-dot {
   box-sizing: border-box;
   flex-shrink: 0;
@@ -1377,7 +1533,8 @@ body[data-wallpaper="minimal"] [data-bg="minimal"] {
     justify-content: center;
   }
   .menu-bar,
-  .bg-switcher {
+  .bg-switcher,
+  .webring-widget {
     display: none !important;
   }
 }
