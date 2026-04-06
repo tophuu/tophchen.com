@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
+import { Analytics } from "@vercel/analytics/next";
+
 import { MusicProvider } from "../lib/MusicContext";
 import "./globals.css";
 
@@ -97,6 +99,7 @@ export default function RootLayout({
         <MusicProvider>
           {children}
         </MusicProvider>
+        <Analytics />
       </body>
     </html>
   );
