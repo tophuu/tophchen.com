@@ -14,9 +14,42 @@ import { tracks, trackUrl, type Track } from "../data/tracks";
 const TRACK_KEY = "pref-music-track";
 const EXPANDED_KEY = "pref-music-expanded";
 const TIME_KEY = "pref-music-time";
+const DURATION_KEY = "pref-music-duration";
+const PROGRESS_KEY = "pref-music-progress";
 const MINI_KEY = "pref-music-mini";
 const HISTORY_KEY = "pref-music-history";
 const HISTORY_POS_KEY = "pref-music-history-pos";
+
+function readSavedTimeSeconds(): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const v = localStorage.getItem(TIME_KEY);
+    return v ? parseFloat(v) || 0 : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function readSavedDurationLabel(): string {
+  if (typeof window === "undefined") return "0:00";
+  try {
+    const v = localStorage.getItem(DURATION_KEY);
+    return v && /^\d+:\d{2}$/.test(v) ? v : "0:00";
+  } catch {
+    return "0:00";
+  }
+}
+
+function readSavedProgressPercent(): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const v = localStorage.getItem(PROGRESS_KEY);
+    const n = v ? parseFloat(v) : 0;
+    return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : 0;
+  } catch {
+    return 0;
+  }
+}
 
 // Module-level Audio singleton — survives Strict Mode double-mount.
 const audio: HTMLAudioElement | null =
@@ -101,9 +134,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMini, setIsMini] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [curTime, setCurTime] = useState("0:00");
-  const [dur, setDur] = useState("0:00");
+  const [progress, setProgress] = useState(() => readSavedProgressPercent());
+  const [curTime, setCurTime] = useState(() => formatTime(readSavedTimeSeconds()));
+  const [dur, setDur] = useState(() => readSavedDurationLabel());
 
   const track = tracks[currentTrack];
 
@@ -298,11 +331,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       if (v !== null) mini = v === "1";
     } catch {}
 
-    let savedTime = 0;
-    try {
-      const v = localStorage.getItem(TIME_KEY);
-      if (v) savedTime = parseFloat(v) || 0;
-    } catch {}
+    let savedTime = readSavedTimeSeconds();
 
     if (restoredHistory) {
       playHistoryRef.current = restoredHistory;
@@ -324,7 +353,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         if (switchingTrackRef.current && !audio.paused && audio.currentTime > 0) {
           switchingTrackRef.current = false;
         }
-        setProgress((audio.currentTime / audio.duration) * 100);
+        const pct = (audio.currentTime / audio.duration) * 100;
+        setProgress(pct);
         setCurTime(formatTime(audio.currentTime));
         // Throttle localStorage writes to ~every 2 seconds
         const now = Date.now();
@@ -332,18 +362,27 @@ export function MusicProvider({ children }: { children: ReactNode }) {
           lastTimeSave = now;
           try {
             localStorage.setItem(TIME_KEY, String(audio.currentTime));
+            localStorage.setItem(PROGRESS_KEY, String(pct));
           } catch {}
         }
       }
     };
     const onLoadedMetadata = () => {
-      setDur(formatTime(audio.duration));
+      const durLabel = formatTime(audio.duration);
+      setDur(durLabel);
+      try {
+        localStorage.setItem(DURATION_KEY, durLabel);
+      } catch {}
       // Apply pending seek (timeline restore on reload)
       const seekTo = pendingSeekRef.current;
       if (seekTo !== null && seekTo > 0 && seekTo < audio.duration) {
         audio.currentTime = seekTo;
-        setProgress((seekTo / audio.duration) * 100);
+        const pct = (seekTo / audio.duration) * 100;
+        setProgress(pct);
         setCurTime(formatTime(seekTo));
+        try {
+          localStorage.setItem(PROGRESS_KEY, String(pct));
+        } catch {}
         pendingSeekRef.current = null;
       }
     };
@@ -372,7 +411,23 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     // Flush state on page unload so reloads aren't stale.
     const onBeforeUnload = () => {
       try {
-        localStorage.setItem(TIME_KEY, String(audio.currentTime));
+        // During very fast reload loops, metadata/seek restore may not have applied yet.
+        // Avoid clobbering a valid saved timeline with a transient 0.
+        const existing = readSavedTimeSeconds();
+        const pending = pendingSeekRef.current ?? 0;
+        const current = audio.currentTime;
+        const bestTime = Math.max(existing, pending, current);
+        if (bestTime > 0) {
+          localStorage.setItem(TIME_KEY, String(bestTime));
+        }
+        const durLabel = Number.isFinite(audio.duration) && audio.duration > 0
+          ? formatTime(audio.duration)
+          : readSavedDurationLabel();
+        localStorage.setItem(DURATION_KEY, durLabel);
+        const pct = Number.isFinite(audio.duration) && audio.duration > 0
+          ? Math.max(0, Math.min(100, (bestTime / audio.duration) * 100))
+          : readSavedProgressPercent();
+        localStorage.setItem(PROGRESS_KEY, String(pct));
         localStorage.setItem(HISTORY_KEY, JSON.stringify(playHistoryRef.current));
         localStorage.setItem(HISTORY_POS_KEY, String(historyPosRef.current));
       } catch {}
@@ -391,6 +446,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
     if (savedTime > 0) {
       pendingSeekRef.current = savedTime;
+      setCurTime(formatTime(savedTime));
     }
 
     return () => {
