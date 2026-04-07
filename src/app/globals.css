@@ -15,9 +15,9 @@ body.no-transition *::after {
   transition: none !important;
 }
 
-/* Hide notes content during initial hydration so it never flashes "about"
-   before restoring the persisted active note on production. */
-body.note-booting .note-content-area {
+/* Hide the whole notes UI during non-default restore so sidebar + content
+   hydrate in one frame with the persisted active note. */
+body.note-booting .notes-scale-content {
   visibility: hidden;
 }
 
@@ -472,16 +472,12 @@ body[data-active-note="contact"] .note-preview[data-note="contact"] {
   min-width: 0;
   box-sizing: border-box;
 }
-/* Safe fallback: if active-note is missing/invalid during hydration, show About. */
-[data-panel="about"],
+/* Safe fallback: if active-note is missing during early boot, show About. */
+body:not([data-active-note]) [data-panel="about"],
 body[data-active-note="about"] [data-panel="about"],
 body[data-active-note="projects"] [data-panel="projects"],
 body[data-active-note="contact"] [data-panel="contact"] {
   display: block;
-}
-body[data-active-note="projects"] [data-panel="about"],
-body[data-active-note="contact"] [data-panel="about"] {
-  display: none;
 }
 
 /* ===== NOTE TYPOGRAPHY ===== */

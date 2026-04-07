@@ -8,32 +8,32 @@ interface SidebarProps {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-function startOfDay(value: Date): Date {
-  return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+function startOfUtcDayMs(value: Date): number {
+  return Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate());
 }
 
-function parseLastEditedDate(value: string): Date | null {
+function parseLastEditedDateUtcMs(value: string): number | null {
   const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!match) return null;
   const [, year, month, day] = match;
-  const parsed = new Date(Number(year), Number(month) - 1, Number(day));
-  if (Number.isNaN(parsed.getTime())) return null;
+  const parsed = Date.UTC(Number(year), Number(month) - 1, Number(day));
+  if (Number.isNaN(parsed)) return null;
   return parsed;
 }
 
-function getSidebarDateBucket(latestEdited: Date, now: Date): string {
-  const latestDay = startOfDay(latestEdited);
-  const today = startOfDay(now);
-  const diffDays = Math.floor((today.getTime() - latestDay.getTime()) / DAY_MS);
+function getSidebarDateBucket(latestEditedUtcMs: number, now: Date): string {
+  const todayUtcMs = startOfUtcDayMs(now);
+  const diffDays = Math.floor((todayUtcMs - latestEditedUtcMs) / DAY_MS);
 
   if (diffDays <= 0) return "Today";
   if (diffDays === 1) return "Yesterday";
   if (diffDays <= 7) return "Previous 7 Days";
   if (diffDays <= 30) return "Previous 30 Days";
-  if (latestDay.getFullYear() === today.getFullYear()) {
-    return latestDay.toLocaleDateString("en-US", { month: "long" });
+  const latestDay = new Date(latestEditedUtcMs);
+  if (latestDay.getUTCFullYear() === now.getUTCFullYear()) {
+    return latestDay.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
   }
-  return String(latestDay.getFullYear());
+  return String(latestDay.getUTCFullYear());
 }
 
 function FolderIcon() {
@@ -54,8 +54,8 @@ function FolderIcon() {
 
 export default function Sidebar({ onSelectNote }: SidebarProps) {
   const now = new Date();
-  const latestEdited = parseLastEditedDate(lastEditedDate) ?? now;
-  const dayLabel = getSidebarDateBucket(latestEdited, now);
+  const latestEditedUtcMs = parseLastEditedDateUtcMs(lastEditedDate) ?? startOfUtcDayMs(now);
+  const dayLabel = getSidebarDateBucket(latestEditedUtcMs, now);
 
   return (
     <aside className="sidebar">
