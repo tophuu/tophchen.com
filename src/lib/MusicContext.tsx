@@ -399,6 +399,12 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       setIsPlaying(false);
     };
     const onError = () => {
+      // Ignore passive metadata-load failures during reload/boot.
+      // Auto-advance only when we're actively in playback/track-switch flow.
+      if (audio.paused && !switchingTrackRef.current) {
+        setIsPlaying(false);
+        return;
+      }
       if (consecutiveErrorsRef.current < 5) {
         consecutiveErrorsRef.current++;
         handleNextRef.current();
