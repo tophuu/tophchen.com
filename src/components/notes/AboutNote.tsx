@@ -101,7 +101,7 @@ export default function AboutNote() {
           { text: "Jamming out to songs on Spotify", checked: true },
         ]} />
         <p>
-          Since you&apos;re here, I figured I&apos;d share the vibe too. Hope you like some of my favourites tracks!
+          Since you&apos;re here, I figured I&apos;d share the vibe too. Hope you like some of my favorite tracks!
         </p>
     </article>
   );
