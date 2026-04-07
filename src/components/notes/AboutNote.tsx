@@ -98,7 +98,7 @@ export default function AboutNote() {
           { text: "Buried in a book or manga", checked: true },
           { text: "Watching an anime", checked: true },
           { text: "Questioning my life choices in a League of Legends game", checked: true },
-          { text: "Jamming out to a songs on Spotify", checked: true },
+          { text: "Jamming out to songs on Spotify", checked: true },
         ]} />
         <p>
           Since you&apos;re here, I figured I&apos;d share the vibe too. Hope you like some of my favourites tracks!
