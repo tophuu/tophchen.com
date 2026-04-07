@@ -1,13 +1,24 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 const ACTIVE_NOTE_KEY = "pref-active-note";
+const VALID_NOTES = ["about", "projects", "contact"];
 
 export function useNoteStore() {
   const [, setRender] = useState(0);
 
   const activeNote = (typeof document !== "undefined" && document.body.dataset.activeNote) || "about";
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(ACTIVE_NOTE_KEY);
+      if (saved && VALID_NOTES.includes(saved)) {
+        document.body.dataset.activeNote = saved;
+        setRender((n) => n + 1);
+      }
+    } catch {}
+  }, []);
 
   const setActiveNote = useCallback((id: string) => {
     document.body.dataset.activeNote = id;

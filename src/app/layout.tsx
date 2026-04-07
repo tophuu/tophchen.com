@@ -85,7 +85,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const bootstrapScript = `(function(){var b=document.body,V=['about','projects','contact'],SESSION_KEY='pref-session-last-seen',SESSION_MS=24*60*60*1000;try{var now=Date.now();var raw=localStorage.getItem(SESSION_KEY);var last=raw?Number(raw):NaN;var hasValidLast=Number.isFinite(last)&&last>0;if(hasValidLast&&now-last>SESSION_MS){for(var i=localStorage.length-1;i>=0;i--){var k=localStorage.key(i);if(k&&k.indexOf('pref-')===0){localStorage.removeItem(k)}}}localStorage.setItem(SESSION_KEY,String(now));var w=localStorage.getItem('pref-wallpaper');if(w)b.dataset.wallpaper=w;var t=localStorage.getItem('pref-theme');if(t==='black'||t==='white')b.dataset.notesTheme=t;var n=localStorage.getItem('pref-active-note');if(n&&V.indexOf(n)>=0)b.dataset.activeNote=n}catch(e){}b.classList.add('no-transition')})()`;
+  const bootstrapScript = `(function(){var b=document.body,V=['about','projects','contact'];try{var S='pref-session-ts',M=86400000,now=Date.now(),raw=localStorage.getItem(S),last=raw?Number(raw):0;if(last>0&&now-last>M){for(var i=localStorage.length-1;i>=0;i--){var k=localStorage.key(i);if(k&&k.indexOf('pref-')===0)localStorage.removeItem(k)}}localStorage.setItem(S,String(now));var w=localStorage.getItem('pref-wallpaper');if(w)b.dataset.wallpaper=w;var t=localStorage.getItem('pref-theme');if(t==='black'||t==='white')b.dataset.notesTheme=t;var n=localStorage.getItem('pref-active-note');if(n&&V.indexOf(n)>=0)b.dataset.activeNote=n}catch(e){}b.classList.add('no-transition')})()`;
   return (
     <html lang="en">
       <body data-wallpaper="big-sur" data-notes-theme="white" data-active-note="about" suppressHydrationWarning>

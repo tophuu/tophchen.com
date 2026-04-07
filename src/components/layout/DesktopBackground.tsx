@@ -159,8 +159,16 @@ export default function DesktopBackground() {
   }, []);
 
   useEffect(() => {
-    const savedWp = document.body.dataset.wallpaper || "big-sur";
-    const savedTheme = (document.body.dataset.notesTheme || "white") as "white" | "black";
+    let savedWp = document.body.dataset.wallpaper || "big-sur";
+    let savedTheme = (document.body.dataset.notesTheme || "white") as "white" | "black";
+    try {
+      const lsWp = localStorage.getItem(WALLPAPER_KEY);
+      if (lsWp) savedWp = lsWp;
+      const lsTheme = localStorage.getItem(THEME_KEY);
+      if (lsTheme === "black" || lsTheme === "white") savedTheme = lsTheme;
+    } catch {}
+    document.body.dataset.wallpaper = savedWp;
+    document.body.dataset.notesTheme = savedTheme;
     setActive(savedWp);
     setNotesTheme(savedTheme);
     requestAnimationFrame(() => {
