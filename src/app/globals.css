@@ -15,6 +15,12 @@ body.no-transition *::after {
   transition: none !important;
 }
 
+/* Hide notes content during initial hydration so it never flashes "about"
+   before restoring the persisted active note on production. */
+body.note-booting .note-content-area {
+  visibility: hidden;
+}
+
 body.theme-transitioning,
 body.theme-transitioning *,
 body.theme-transitioning *::before,
@@ -466,10 +472,16 @@ body[data-active-note="contact"] .note-preview[data-note="contact"] {
   min-width: 0;
   box-sizing: border-box;
 }
+/* Safe fallback: if active-note is missing/invalid during hydration, show About. */
+[data-panel="about"],
 body[data-active-note="about"] [data-panel="about"],
 body[data-active-note="projects"] [data-panel="projects"],
 body[data-active-note="contact"] [data-panel="contact"] {
   display: block;
+}
+body[data-active-note="projects"] [data-panel="about"],
+body[data-active-note="contact"] [data-panel="about"] {
+  display: none;
 }
 
 /* ===== NOTE TYPOGRAPHY ===== */

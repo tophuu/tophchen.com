@@ -18,6 +18,7 @@ export function useNoteStore() {
         setRender((n) => n + 1);
       }
     } catch {}
+    document.body.classList.remove("note-booting");
   }, []);
 
   const setActiveNote = useCallback((id: string) => {
