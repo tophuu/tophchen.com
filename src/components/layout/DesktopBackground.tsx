@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const bgs = [
   {
@@ -158,7 +158,7 @@ export default function DesktopBackground() {
     }, 650);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let savedWp = document.body.dataset.wallpaper || "big-sur";
     let savedTheme = (document.body.dataset.notesTheme || "white") as "white" | "black";
     try {

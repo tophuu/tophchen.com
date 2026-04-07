@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useLayoutEffect } from "react";
 
 const ACTIVE_NOTE_KEY = "pref-active-note";
 const VALID_NOTES = ["about", "projects", "contact"];
@@ -10,7 +10,7 @@ export function useNoteStore() {
 
   const activeNote = (typeof document !== "undefined" && document.body.dataset.activeNote) || "about";
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       const saved = localStorage.getItem(ACTIVE_NOTE_KEY);
       if (saved && VALID_NOTES.includes(saved)) {
