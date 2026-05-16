@@ -11,7 +11,7 @@ const experience = [
     date: "Summer 2026",
     logoSrc: "/images/companies/atlassian_logo.png",
     bullets: [
-      "Developing of an enterprise permissions system for Loom",
+      "Developing an enterprise permissions system for Loom",
       "Building services to intercept video creation pipelines with RBAC evaluation",
     ],
   },
