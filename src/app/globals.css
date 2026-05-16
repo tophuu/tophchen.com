@@ -221,6 +221,12 @@ body[data-notes-theme="black"] {
   user-select: none;
 }
 
+@media (pointer: coarse) and (orientation: landscape) and (min-width: 768px) {
+  .home-stage {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .notes-scale-frame {
   width: calc(1140px * var(--notes-scale));
   height: calc(712px * var(--notes-scale));
@@ -1355,7 +1361,7 @@ body .exp-details {
   transform: scale(1.2);
 }
 .webring-core:hover {
-  transform: scale(1.15);
+  transform: scale(1.10);
 }
 
 .webring-nav:active {
