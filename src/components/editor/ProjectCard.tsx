@@ -1,7 +1,7 @@
 interface ProjectCardProps {
   title: string;
   description: string;
-  tags: { label: string; color: string }[];
+  tags: { label: string }[];
   href?: string;
 }
 
@@ -11,7 +11,7 @@ export default function ProjectCard({ title, description, tags, href = "#" }: Pr
       <h3>{title} <span className="pc-ext-icon" aria-hidden="true">↗</span></h3>
       <div className="tag-row">
         {tags.map((tag) => (
-          <span key={tag.label} className={`tag tag-${tag.color}`}>
+          <span key={tag.label} className="tag">
             {tag.label}
           </span>
         ))}

@@ -22,9 +22,9 @@ body.note-booting .notes-scale-content {
 }
 
 body.theme-transitioning,
-body.theme-transitioning *,
-body.theme-transitioning *::before,
-body.theme-transitioning *::after {
+body.theme-transitioning *:not(.desktop-bg),
+body.theme-transitioning *:not(.desktop-bg)::before,
+body.theme-transitioning *:not(.desktop-bg)::after {
   transition-property: color, background-color, border-color, box-shadow, fill, stroke !important;
   transition-duration: var(--theme-transition-duration) !important;
   transition-timing-function: var(--theme-transition-easing) !important;
@@ -33,7 +33,6 @@ body.theme-transitioning *::after {
 
 /* Elements that don't respond to the notes-theme toggle — exempt them from the
    blanket transition so mobile GPUs don't waste cycles tracking them. */
-body.theme-transitioning .desktop-bg,
 body.theme-transitioning .webring-widget,
 body.theme-transitioning .webring-widget *,
 body.theme-transitioning .bg-switcher,
@@ -53,6 +52,7 @@ body.theme-transitioning .portrait-overlay * {
   /* Light: brighter, more saturated honey-gold (dark mode keeps #d9a010 below). */
   --accent-orange: #f2b82e;
   --accent: var(--accent-orange);
+  --accent-text: #efb42b;
   --accent-red: #ff3b30;
   --hover: #f5f5f5;
   --selected-strong: #f7e18a;
@@ -90,14 +90,9 @@ body.theme-transitioning .portrait-overlay * {
   --sketch-bg: #fefefa;
   --sketch-border: #ddd9c8;
   --check-border: #c7c7cc;
-  --tag-orange-bg: #fff2e0;
-  --tag-orange-fg: #b36800;
-  --tag-blue-bg: #e6f2ff;
-  --tag-blue-fg: #0055cc;
-  --tag-green-bg: #e7f8eb;
-  --tag-green-fg: #1a8a3e;
-  --tag-purple-bg: #f5eafb;
-  --tag-purple-fg: #7b2fa6;
+  --tag-bg: rgba(0,0,0,0.065);
+  --tag-fg: #57575b;
+  --tag-border: rgba(0,0,0,0.085);
   --scrollbar-thumb: #9a9aa0;
   --scrollbar-track: #f0f0f2;
   --sidebar-tab-hover-bg: #eeeeee;
@@ -121,6 +116,7 @@ body {
 body[data-notes-theme="black"] {
   --accent-orange: #d9a010;
   --accent: var(--accent-orange);
+  --accent-text: var(--accent);
   --bg: #0b0b0c;
   --sidebar-bg: rgba(28,28,32,0.92);
   --sidebar-border: #3b3b3d;
@@ -151,14 +147,9 @@ body[data-notes-theme="black"] {
   --sketch-bg: #252527;
   --sketch-border: #3c3c3e;
   --check-border: #606062;
-  --tag-orange-bg: #493418;
-  --tag-orange-fg: #ffb040;
-  --tag-blue-bg: #162f4b;
-  --tag-blue-fg: #4da3ff;
-  --tag-green-bg: #213e2a;
-  --tag-green-fg: #5cd87a;
-  --tag-purple-bg: #392744;
-  --tag-purple-fg: #c88aee;
+  --tag-bg: rgba(255,255,255,0.105);
+  --tag-fg: #cacace;
+  --tag-border: rgba(255,255,255,0.105);
   --scrollbar-thumb: #a6a6aa;
   --scrollbar-track: #2f2f31;
   --sidebar-tab-hover-bg: #2f2f31;
@@ -327,7 +318,7 @@ body[data-notes-theme="black"] {
 }
 .sidebar-folder-icon svg path {
   fill: none;
-  stroke: var(--accent-orange);
+  stroke: var(--accent-text);
   stroke-width: 1.75;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -575,11 +566,15 @@ mark.purple { background: rgba(204,126,255,0.3); }
 
 /* ===== TAG PILLS ===== */
 .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
-.tag { font-size: 12px; padding: 2px 10px; border-radius: 12px; font-weight: 500; }
-.tag-orange { background: var(--tag-orange-bg); color: var(--tag-orange-fg); }
-.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-fg); }
-.tag-green { background: var(--tag-green-bg); color: var(--tag-green-fg); }
-.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-fg); }
+.tag {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 550;
+  background: var(--tag-bg);
+  color: var(--tag-fg);
+  border: 0.5px solid var(--tag-border);
+}
 
 /* ===== PROJECT CARDS ===== */
 .project-card {
@@ -599,7 +594,7 @@ mark.purple { background: rgba(204,126,255,0.3); }
   box-shadow: 0 0 0 0.5px var(--exp-card-hover-border);
   text-decoration: none;
 }
-.project-card h3 { font-size: 16px; font-weight: 600; margin: 0 0 2px; }
+.project-card h3 { font-size: 16px; font-weight: 600; margin: 0 0 2px; color: var(--accent-text); }
 .project-card .pc-desc {
   font-size: 14px;
   color: var(--text-secondary);
@@ -664,11 +659,11 @@ mark.purple { background: rgba(204,126,255,0.3); }
 }
 .link-preview .lp-url {
   font-size: 14px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .link-preview:hover .lp-url {
   text-decoration: underline;
-  text-decoration-color: var(--accent);
+  text-decoration-color: var(--accent-text);
 }
 
 /* ===== EXPERIENCE CARD ===== */

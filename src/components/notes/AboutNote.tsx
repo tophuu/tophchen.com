@@ -10,7 +10,10 @@ const experience = [
     role: "Software Engineer",
     date: "Summer 2026",
     logoSrc: "/images/companies/atlassian_logo.png",
-    bullets: ["Incoming summer '26"],
+    bullets: [
+      "Developing of an enterprise permissions system for Loom",
+      "Building services to intercept video creation pipelines with RBAC evaluation",
+    ],
   },
   {
     company: "Cohere",

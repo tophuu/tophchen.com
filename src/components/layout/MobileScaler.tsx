@@ -8,6 +8,7 @@ const MENU_H = 25;
 const PAD_X = 16;
 const PAD_Y = 16;
 const PHONE_MAX_WIDTH = 767;
+const MAX_DESKTOP_SCALE = 1.18;
 
 export default function MobileScaler() {
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function MobileScaler() {
       const isPhone = isTouch && Math.min(w, h) <= PHONE_MAX_WIDTH;
       const isPhonePortrait = isPhone && h > w;
 
-      // Keep desktop/iPad at native scale by default; scale app window only when needed.
+      // Let large desktop displays breathe while still fitting smaller screens.
       if (isPhonePortrait) {
         document.documentElement.style.setProperty("--notes-scale", "1");
         return;
@@ -28,7 +29,7 @@ export default function MobileScaler() {
 
       const availableW = Math.max(320, w - PAD_X * 2);
       const availableH = Math.max(240, h - MENU_H - PAD_Y * 2);
-      const scale = Math.min(1, availableW / APP_W, availableH / APP_H);
+      const scale = Math.min(MAX_DESKTOP_SCALE, availableW / APP_W, availableH / APP_H);
       const normalizedScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
 
       document.documentElement.style.setProperty("--notes-scale", normalizedScale.toFixed(4));
