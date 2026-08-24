@@ -69,7 +69,7 @@ export default function Sidebar({ onSelectNote }: SidebarProps) {
       </div>
 
       <div style={{ height: "20px", flexShrink: 0 }} />
-      <div className="sidebar-day-label">{dayLabel}</div>
+      <div className="sidebar-day-label" suppressHydrationWarning>{dayLabel}</div>
       <div className="sidebar-note-list">
         {notes.map((note) => (
           <button

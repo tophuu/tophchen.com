@@ -53,7 +53,7 @@ const links = [
 export default function ContactNote() {
   return (
     <article>
-      <div className="note-date">March 30, 2026 at 10:38 PM</div>
+      <div className="note-date">August 24, 2026 at 5:56 PM</div>
       <h1>Contact &amp; Links</h1>
       <p>Always down to chat about anything!</p>
 

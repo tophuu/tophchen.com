@@ -6,33 +6,43 @@ import Checklist from "../editor/Checklist";
 
 const experience = [
   {
+    company: "Wealthsimple",
+    role: "Software Engineer Intern", 
+    date: "Fall 2026",
+    logoSrc: "/images/companies/wealthsimple_logo.png",
+    bullets: [
+      "Corporate Actions team"
+    ]
+  },
+  {
     company: "Atlassian",
-    role: "Software Engineer",
+    role: "Software Engineer Intern",
     date: "Summer 2026",
     logoSrc: "/images/companies/atlassian_logo.png",
     bullets: [
-      "Developing an enterprise permissions system for Loom",
-      "Building services to intercept video creation pipelines with RBAC evaluation",
+      "Loom Admin Experience team",
+      "Worked on an entity-agnostic internal migration tool",
+      "Built admin interfaces with workspace-scoped RBAC",
     ],
   },
   {
     company: "Cohere",
-    role: "Data Engineer",
+    role: "Data Engineer Intern",
     date: "Fall 2025",
     logoSrc: "/images/companies/cohere_logo.png",
     bullets: [
-      "Optimized high-fidelity RLHF pipelines for over 1,000+ entries",
+      "Optimized RLHF pipelines and built training datasets",
       "Worked on data quality and evaluation workflows for LLMs",
     ],
   },
   {
     company: "Qolytics",
-    role: "Software Engineer",
+    role: "Software Engineer Intern",
     date: "Summer 2025",
     logoSrc: "/images/companies/qolytics_logo.png",
     bullets: [
+      "Engineered a real-time ingestion pipeline for ML microservices",
       "Developed interactive analytics and 3D visualizations",
-      "Engineered real-time data pipelines for ML microservices",
       "Built and launched an end-to-end client dashboard MVP",
     ],
   },
@@ -47,7 +57,7 @@ export default function AboutNote() {
 
   return (
     <article>
-      <div className="note-date">March 30, 2026 at 10:14 PM</div>
+      <div className="note-date">August 24, 2026 at 5:51 PM</div>
       <h1>About Me</h1>
       <p>
         Hey! I&apos;m <Highlight>Toph</Highlight> — a computer science student at the University of Waterloo.
